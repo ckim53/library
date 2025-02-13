@@ -1,17 +1,5 @@
 const myLibrary = [];
 
-function getLength(){
-    let i = 0, length = 0;
-
-    while (i < myLibrary.length) {
-        if (myLibrary[i]) {
-          length++;  
-        } 
-        i++;
-    }
-    return length;
-}
-
 function Book (title, author, pages, read, data) {
     this.title = title;
     this.author = author;
@@ -76,7 +64,6 @@ function displayBooks() {
 function addBookToLibrary(title, author, pages, read) {
     console.log("adding book");
     newBook = new Book(title, author, pages, read, myLibrary.length);
-    
     myLibrary.push(newBook);
     displayBooks();
 }
