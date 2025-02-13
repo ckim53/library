@@ -9,10 +9,6 @@ body {
     margin: 20px;
     font-weight: 500;
 }
-.description {
-    font-size: 15px;
-    margin: 20px;
-}
 
 #cards {
     display: grid;

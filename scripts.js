@@ -1,5 +1,17 @@
 const myLibrary = [];
 
+function getLength(){
+    let i = 0, length = 0;
+
+    while (i < myLibrary.length) {
+        if (myLibrary[i]) {
+          length++;  
+        } 
+        i++;
+    }
+    return length;
+}
+
 function Book (title, author, pages, read, data) {
     this.title = title;
     this.author = author;
@@ -8,7 +20,7 @@ function Book (title, author, pages, read, data) {
     this.data = data;
 
     this.removeBook = function () {
-        myLibrary.splice(this.data, 1);
+        myLibrary[this.data] = null;
     }
 
     this.toggleRead = function() {
@@ -54,8 +66,10 @@ function displayBooks() {
     }
 
     for (let i=0; i < myLibrary.length; i++) {
-        const card = createCard(myLibrary[i]);
-        myLib.appendChild(card);
+        if (myLibrary[i]) {
+            const card = createCard(myLibrary[i]);
+            myLib.appendChild(card);
+        }
     }
 }
 
