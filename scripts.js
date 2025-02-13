@@ -1,15 +1,70 @@
 const myLibrary = [];
- 
-function Book (title, author, pages, read) {
+
+function Book (title, author, pages, read, data) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
+    this.data = data;
+
+    this.removeBook = function () {
+        myLibrary.splice(this.data, 1);
+    }
+
+    this.toggleRead = function() {
+        this.read = this.read ? false : true;
+    }
+}
+
+const dialog = document.querySelector("dialog");
+const addButton = document.querySelector("dialog + button");
+const closeButton = document.querySelector("dialog button");
+
+addButton.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+closeButton.addEventListener("click", () => {
+  dialog.close();
+});
+
+const bookForm = document.getElementById("book-form");
+
+bookForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const title = document.getElementById("title").value;
+    const author = document.getElementById("author").value;
+    const pages = document.getElementById("pages").value;
+    const read = document.querySelector('input[id="read"]:checked') ? true : false;
+
+    console.log("Title: " + title);
+    console.log("Author: " + author);
+    console.log("Pages: " + pages);
+    console.log("Have read: " + read);
+
+    addBookToLibrary(title, author, pages, read);
+    document.getElementById('book-form').reset();
+    dialog.close();
+});
+
+function displayBooks() {
+    const myLib = document.querySelector("#cards");
+    while (myLib.firstChild) {
+        myLib.removeChild(myLib.firstChild);
+    }
+
+    for (let i=0; i < myLibrary.length; i++) {
+        const card = createCard(myLibrary[i]);
+        myLib.appendChild(card);
+    }
 }
 
 function addBookToLibrary(title, author, pages, read) {
-    newBook = new Book(title, author, pages, read);
-    myLibrary.unshift(newBook);
+    console.log("adding book");
+    newBook = new Book(title, author, pages, read, myLibrary.length);
+    
+    myLibrary.push(newBook);
+    displayBooks();
 }
 
 function createCard(newBook) {
@@ -18,45 +73,33 @@ function createCard(newBook) {
     card.textContent = `${newBook.title}`;
     card.style.backgroundColor = "powderBlue";
     card.style.color = "gray";
+
+    const removeButton = document.createElement("button");
+    removeButton.classList.add("remove");
+    removeButton.textContent = "Remove Book";
+    removeButton.addEventListener('click', () => {newBook.removeBook(); displayBooks();});
+
+    const toggleRead = document.createElement("button");
+    toggleRead.classList.add("toggle-read");
+    toggleRead.textContent = "Change Read Status";
+    toggleRead.addEventListener('click', () => {newBook.toggleRead(); displayBooks();});
+   
+    const bookInfo = document.createElement("div");
     
-    card.addEventListener("click", function() {
-        if (card.textContent == newBook.title) {
-            card.textContent = "";
-            card.style.backgroundColor = "steelBlue";
-            card.style.color = "white";
+    const author = document.createElement("p");
+    const pages = document.createElement("p");
+    const read = document.createElement("p");
 
-            const author = document.createElement("p");
-            const pages = document.createElement("p");
-            const read = document.createElement("p");
+    author.textContent = "by " + newBook.author;
+    pages.textContent = newBook.pages + " pages";
+    read.textContent = newBook.read ? "Read" : "Not Read Yet";
 
-            author.textContent = "by " + newBook.author;
-            pages.textContent = newBook.pages + " pages";
-            read.textContent = newBook.read ? "Read" : "Not Read Yet";
-
-            card.appendChild(author);
-            card.appendChild(pages);
-            card.appendChild(read);
-        }
-        else {
-            card.textContent = `${newBook.title}`;
-            card.style.backgroundColor = "powderBlue";
-            card.style.color = "gray";
-        }
-    });
+    bookInfo.appendChild(author);
+    bookInfo.appendChild(pages);
+    bookInfo.appendChild(read);
+    card.appendChild(bookInfo);
+    card.appendChild(toggleRead);
+    card.appendChild(removeButton);
     return card;
 }
 
-function displayBooks() {
-    const myLib = document.querySelector("#cards");
-    for (let i=0; i < myLibrary.length; i++) {
-        //display card
-        const card = createCard(myLibrary[i]);
-        console.log(card.textContent);
-        myLib.appendChild(card);
-    }
-}
-
-addBookToLibrary("The Hobbit", "JR", 295, 0);
-displayBooks();
-addBookToLibrary("The Hobbit", "JR", 295, 0);
-displayBooks();
