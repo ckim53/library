@@ -1,17 +1,19 @@
 const myLibrary = [];
 
-function Book (title, author, pages, read, data) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-    this.data = data;
+class Book {
+    constructor(title, author, pages, read, data){
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+        this.data = data;
+    }
 
-    this.removeBook = function () {
+    removeBook() {
         myLibrary[this.data] = null;
     }
 
-    this.toggleRead = function() {
+    toggleRead() {
         this.read = this.read ? false : true;
     }
 }
